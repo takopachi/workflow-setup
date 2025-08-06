@@ -1,4 +1,4 @@
-name: Auto Release
+name: Auto Build and Release with Test
 
 on:
   push:
@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Run tests
+        run: python3 test.py
 
       - name: Get latest version number
         id: get_tag
