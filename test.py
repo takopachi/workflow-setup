@@ -1,5 +1,7 @@
-from main import test
+from main import add
 
-if __name__ == "__main__":
-    test()
+def test():
+    assert add(3, 5) == 8 # Correct test condition
     print("All tests passed.")
+
+test()
