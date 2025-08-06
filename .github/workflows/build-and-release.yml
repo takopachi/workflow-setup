@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Environment setup
+        run: pip install numpy
+
       - name: Checkout code
         uses: actions/checkout@v3
 
