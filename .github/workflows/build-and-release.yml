@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+  pull_request:
+    branches:
+      - main # This will run workflow on pull_requests targetting main
 jobs:
   release:
     runs-on: ubuntu-latest
