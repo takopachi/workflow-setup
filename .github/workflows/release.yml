@@ -1,0 +1,45 @@
+name: Auto Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get latest version number
+        id: get_tag
+        run: |
+          git fetch --tags
+          # Extract latest tag
+          TAG=$(git tag --sort=-v:refname | grep -E '^v[0-9]+$' | head -n 1)
+          if [ -z "$TAG" ]; then
+            echo "tag=v0" >> $GITHUB_OUTPUT # If no tag extracted, output v0
+          else
+            echo "tag=$TAG" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Bump to next version
+        id: bump_version
+        run: |
+          OLD=${{ steps.get_tag.outputs.tag }} # Existing tag
+          VERSION_NUMBER=${OLD#v}
+          NEW_NUMBER=$((VERSION_NUMBER + 1)) # Add 1 for latest version
+          NEW_TAG="v$NEW_NUMBER"
+          echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.bump_version.outputs.new_tag }}
+          release_name: Release ${{ steps.bump_version.outputs.new_tag }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
