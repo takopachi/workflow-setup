@@ -1,7 +1,7 @@
-from main import add
+from main import subtract
 
 def test():
-    assert add(3, 5) == 8 # Correct test condition
+    assert subtract(5, 3) == 2 # Correct test condition
     print("All tests passed.")
 
 test()
